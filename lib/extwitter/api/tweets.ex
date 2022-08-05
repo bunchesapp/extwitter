@@ -19,7 +19,7 @@ defmodule ExTwitter.API.Tweets do
 
   def update(status, options \\ []) do
     params = ExTwitter.Parser.parse_request_params([status: status] ++ options)
-    request(:post, "1.1/statuses/update.json", params)
+    request(:post, "2/tweets", params)
     |> ExTwitter.Parser.parse_tweet
   end
 
@@ -55,7 +55,7 @@ defmodule ExTwitter.API.Tweets do
 
   def destroy_status(id, options \\ []) do
     params = ExTwitter.Parser.parse_request_params(options)
-    request(:post, "1.1/statuses/destroy/#{id}.json", params)
+    request(:delete, "2/tweets/#{id}", params)
     |> ExTwitter.Parser.parse_tweet
   end
 

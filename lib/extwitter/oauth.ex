@@ -6,6 +6,10 @@ defmodule ExTwitter.OAuth do
   @doc """
   Send request with get/post method.
   """
+  def request(:delete, url, params, consumer_key, consumer_secret, access_token, access_token_secret) do
+    oauth_delete(url, params, consumer_key, consumer_secret, access_token, access_token_secret, [])
+  end
+
   def request(:get, url, params, consumer_key, consumer_secret, access_token, access_token_secret) do
     oauth_get(url, params, consumer_key, consumer_secret, access_token, access_token_secret, [])
   end
@@ -28,6 +32,14 @@ defmodule ExTwitter.OAuth do
   @doc """
   Send oauth request with get or post method.
   """
+  def oauth_delete(url, params, consumer_key, consumer_secret, access_token, access_token_secret, options) do
+    signed_params = get_signed_params(
+      "delete", url, params, consumer_key, consumer_secret, access_token, access_token_secret)
+    encoded_params = URI.encode_query(signed_params)
+    request = {to_charlist(url <> "?" <> encoded_params), []}
+    send_httpc_request(:delete, request, options)
+  end
+
   def oauth_get(url, params, consumer_key, consumer_secret, access_token, access_token_secret, options) do
     signed_params = get_signed_params(
       "get", url, params, consumer_key, consumer_secret, access_token, access_token_secret)
